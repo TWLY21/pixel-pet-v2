@@ -1,0 +1,20 @@
+{
+  "name": "pixel-desktop-pet-world",
+  "version": "1.0.0",
+  "description": "A simple multi-pet desktop world built with Electron.",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "keywords": [
+    "electron",
+    "desktop-pet",
+    "pixel-art",
+    "virtual-pet"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^37.2.1"
+  }
+}

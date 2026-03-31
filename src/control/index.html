@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pixel Desktop Pet World Control Panel</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="panel-shell">
+      <header class="hero-card">
+        <p class="eyebrow">Phase 2 Control Panel</p>
+        <h1>Pixel Desktop Pet World</h1>
+        <p class="hero-copy">
+          Add up to three tiny companions, pick the monitor they live on, and decide whether they cheer you on with supportive slogans.
+        </p>
+      </header>
+
+      <section class="card">
+        <div class="section-header">
+          <div>
+            <p class="section-label">World Settings</p>
+            <div id="status-text" class="status-text">Loading...</div>
+          </div>
+        </div>
+
+        <div class="field-grid">
+          <label class="field">
+            <span>Display</span>
+            <select id="display-select"></select>
+          </label>
+
+          <label class="field">
+            <span>Positive slogans</span>
+            <select id="slogan-select">
+              <option value="on">Enabled</option>
+              <option value="off">Disabled</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="actions-row">
+          <button id="toggle-visibility-button" type="button">Hide Pets</button>
+          <button id="hide-panel-button" type="button">Hide Panel</button>
+          <button id="remove-all-button" type="button" class="danger-button">Remove All</button>
+          <button id="quit-app-button" type="button" class="danger-button">Quit App</button>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="section-header">
+          <div>
+            <p class="section-label">Character Roster</p>
+            <span class="helper-text">Phase 3 lineup with simple preview art and preset variants.</span>
+          </div>
+        </div>
+
+        <div id="roster-grid" class="roster-grid"></div>
+      </section>
+
+      <section class="card">
+        <div class="section-header">
+          <div>
+            <p class="section-label">Add Pet</p>
+            <span class="helper-text">Choose a type and a color variant, then add it to the desktop world.</span>
+          </div>
+        </div>
+
+        <div class="field-grid">
+          <label class="field">
+            <span>Pet type</span>
+            <select id="type-select"></select>
+          </label>
+
+          <label class="field">
+            <span>Variant</span>
+            <select id="variant-select"></select>
+          </label>
+        </div>
+
+        <div class="actions-row">
+          <button id="add-pet-button" type="button">Add Pet</button>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="section-header">
+          <div>
+            <p class="section-label">Active Pets</p>
+            <span class="helper-text">Each pet can be removed individually. Drag them directly on the desktop scene to reposition them.</span>
+          </div>
+        </div>
+
+        <div id="active-pets-list" class="active-pets-list"></div>
+      </section>
+    </main>
+
+    <script type="module" src="./controlPanel.js"></script>
+  </body>
+  </html>

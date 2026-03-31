@@ -1,0 +1,287 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background:
+    radial-gradient(circle at top left, rgba(255, 243, 217, 0.96), rgba(246, 238, 225, 0.98) 40%),
+    #f4efe5;
+  color: #2d2c3f;
+}
+
+.panel-shell {
+  padding: 24px;
+  display: grid;
+  gap: 18px;
+}
+
+.hero-card,
+.card,
+.pet-card {
+  border-radius: 22px;
+  background: rgba(255, 253, 247, 0.94);
+  box-shadow: 0 18px 34px rgba(65, 58, 42, 0.12);
+}
+
+.hero-card {
+  padding: 26px;
+}
+
+.hero-card h1 {
+  margin: 0 0 12px;
+  font-size: 38px;
+  line-height: 1.05;
+}
+
+.hero-copy {
+  margin: 0;
+  max-width: 42ch;
+  line-height: 1.6;
+  font-size: 17px;
+  color: #55536b;
+}
+
+.card {
+  padding: 22px;
+}
+
+.eyebrow,
+.section-label {
+  margin: 0 0 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 12px;
+  font-weight: 800;
+  color: #7c5b36;
+}
+
+.section-header {
+  margin-bottom: 14px;
+}
+
+.helper-text {
+  color: #6a687d;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.status-text {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.field-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.roster-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+
+.roster-card {
+  border-radius: 18px;
+  padding: 18px;
+  background: rgba(248, 243, 232, 0.9);
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: transform 120ms ease, border-color 120ms ease, box-shadow 120ms ease;
+}
+
+.roster-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 20px rgba(65, 58, 42, 0.08);
+}
+
+.roster-card.is-selected {
+  border-color: #31436c;
+  box-shadow: 0 12px 20px rgba(49, 67, 108, 0.14);
+}
+
+.roster-preview {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.roster-preview img {
+  width: 92px;
+  height: 92px;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 8px 8px rgba(18, 24, 37, 0.18));
+  flex: 0 0 auto;
+}
+
+.roster-preview h3 {
+  margin: 0 0 4px;
+  font-size: 29px;
+  line-height: 1.05;
+}
+
+.roster-preview p {
+  margin: 0;
+  color: #5f5c70;
+  line-height: 1.5;
+  font-size: 14px;
+}
+
+.roster-type {
+  margin: 0 0 6px;
+  color: #7b708b;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.variant-swatches {
+  margin-top: 12px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.variant-swatch {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 9px;
+  border-radius: 999px;
+  background: #efe6d6;
+  color: #5c513d;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.swatch-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid rgba(43, 44, 69, 0.16);
+}
+
+.field {
+  display: grid;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #5c513d;
+}
+
+select,
+button {
+  border: 0;
+  border-radius: 999px;
+  min-height: 48px;
+  padding: 12px 16px;
+  font-size: 16px;
+}
+
+select {
+  background: #ece4d8;
+  color: #2d2c3f;
+}
+
+button {
+  background: #31436c;
+  color: #fff9ef;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.danger-button {
+  background: #b74d55;
+}
+
+.actions-row {
+  margin-top: 16px;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.actions-row button {
+  flex: 1 1 150px;
+}
+
+.active-pets-list {
+  display: grid;
+  gap: 14px;
+}
+
+.pet-card {
+  padding: 18px;
+}
+
+.pet-card h3 {
+  margin: 0 0 6px;
+}
+
+.pet-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.pet-header img {
+  width: 82px;
+  height: 82px;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 8px 8px rgba(18, 24, 37, 0.18));
+}
+
+.pet-card p {
+  margin: 0;
+  color: #5f5c70;
+  line-height: 1.55;
+  font-size: 14px;
+}
+
+.pet-meta {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.meta-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: #efe6d6;
+  font-size: 13px;
+  font-weight: 700;
+  color: #5c513d;
+}
+
+.empty-state {
+  padding: 22px;
+  border-radius: 18px;
+  background: rgba(255, 253, 247, 0.72);
+  color: #666277;
+  text-align: center;
+  font-size: 15px;
+}
+
+@media (max-width: 640px) {
+  .field-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .actions-row button {
+    flex-basis: 100%;
+  }
+}
