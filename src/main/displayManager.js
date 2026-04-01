@@ -1,4 +1,4 @@
-const {
+﻿const {
   OVERLAY_HEIGHT,
   PANEL_HEIGHT,
   PANEL_WIDTH,
@@ -15,17 +15,17 @@ class DisplayManager {
     this.activeDisplayId = this.screen.getPrimaryDisplay().id;
   }
 
-  getActiveDisplayId() {
-    this.refreshActiveDisplay();
-    return this.activeDisplayId;
-  }
-
   refreshActiveDisplay() {
     const displays = this.screen.getAllDisplays();
 
     if (!displays.some((display) => display.id === this.activeDisplayId)) {
       this.activeDisplayId = this.screen.getPrimaryDisplay().id;
     }
+  }
+
+  getActiveDisplayId() {
+    this.refreshActiveDisplay();
+    return this.activeDisplayId;
   }
 
   setActiveDisplay(displayId) {
@@ -43,7 +43,6 @@ class DisplayManager {
 
   getActiveDisplay() {
     this.refreshActiveDisplay();
-
     return (
       this.screen.getAllDisplays().find((display) => display.id === this.activeDisplayId) ||
       this.screen.getPrimaryDisplay()
@@ -77,8 +76,8 @@ class DisplayManager {
   getControlPanelBounds() {
     const display = this.getActiveDisplay();
     const workArea = display.workArea;
-    const width = Math.min(PANEL_WIDTH, Math.max(360, workArea.width - 32));
-    const height = Math.min(PANEL_HEIGHT, Math.max(420, workArea.height - 48));
+    const width = Math.min(PANEL_WIDTH, Math.max(360, workArea.width - 36));
+    const height = Math.min(PANEL_HEIGHT, Math.max(480, workArea.height - 48));
 
     return {
       width,

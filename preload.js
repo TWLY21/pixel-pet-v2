@@ -1,4 +1,4 @@
-const { contextBridge, ipcRenderer } = require("electron");
+﻿const { contextBridge, ipcRenderer } = require("electron");
 
 contextBridge.exposeInMainWorld("pixelPetWorld", {
   getAppData: () => ipcRenderer.invoke("app:get-app-data"),
@@ -11,6 +11,7 @@ contextBridge.exposeInMainWorld("pixelPetWorld", {
   startPetDrag: (petId) => ipcRenderer.invoke("world:start-pet-drag", petId),
   updatePetPosition: (payload) => ipcRenderer.invoke("world:update-pet-position", payload),
   endPetDrag: (petId) => ipcRenderer.invoke("world:end-pet-drag", petId),
+  pokePet: (petId) => ipcRenderer.invoke("world:poke-pet", petId),
   setActiveDisplay: (displayId) => ipcRenderer.invoke("display:set-active-display", displayId),
   openControlPanel: () => ipcRenderer.invoke("window:show-control-panel"),
   hideControlPanel: () => ipcRenderer.invoke("window:hide-control-panel"),

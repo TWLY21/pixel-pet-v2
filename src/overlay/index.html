@@ -1,29 +1,26 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Pixel Desktop Pet World Overlay</title>
+    <title>Pixel Desktop Pet World v2 Overlay</title>
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
     <main class="overlay-shell">
       <div class="overlay-actions">
-        <button id="panel-button" class="panel-button" type="button" data-interactive="true">
-          Panel
-        </button>
-        <button id="quit-button" class="panel-button quit-button" type="button" data-interactive="true">
+        <button id="panel-button" class="action-button" type="button" data-interactive="true">Panel</button>
+        <button id="quit-button" class="action-button action-button-danger" type="button" data-interactive="true">
           Quit
         </button>
       </div>
 
-      <div id="debug-badge" class="debug-badge">overlay booting...</div>
       <div id="pet-layer" class="pet-layer"></div>
 
       <section class="scene">
         <div class="scene-platform">
-          <div class="scene-grass sparkle-a"></div>
-          <div class="scene-grass sparkle-b"></div>
+          <div class="scene-grass scene-grass-a"></div>
+          <div class="scene-grass scene-grass-b"></div>
           <div id="hidden-banner" class="hidden-banner">Pets are hidden</div>
         </div>
       </section>
@@ -31,4 +28,4 @@
 
     <script type="module" src="./renderer.js"></script>
   </body>
-  </html>
+</html>

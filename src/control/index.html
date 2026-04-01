@@ -1,30 +1,30 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Pixel Desktop Pet World Control Panel</title>
+    <title>Pixel Desktop Pet World v2 Control Panel</title>
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
     <main class="panel-shell">
       <header class="hero-card">
-        <p class="eyebrow">Phase 2 Control Panel</p>
+        <p class="eyebrow">Fresh Rebuild</p>
         <h1>Pixel Desktop Pet World</h1>
         <p class="hero-copy">
-          Add up to three tiny companions, pick the monitor they live on, and decide whether they cheer you on with supportive slogans.
+          A calmer desktop pet world with simpler controls, size presets, and monitor-aware placement.
         </p>
       </header>
 
-      <section class="card">
+      <section class="card card-world">
         <div class="section-header">
           <div>
-            <p class="section-label">World Settings</p>
+            <p class="section-label">World</p>
             <div id="status-text" class="status-text">Loading...</div>
           </div>
         </div>
 
-        <div class="field-grid">
+        <div class="field-grid field-grid-stacked">
           <label class="field">
             <span>Display</span>
             <select id="display-select"></select>
@@ -47,22 +47,11 @@
         </div>
       </section>
 
-      <section class="card">
-        <div class="section-header">
-          <div>
-            <p class="section-label">Character Roster</p>
-            <span class="helper-text">Phase 3 lineup with simple preview art and preset variants.</span>
-          </div>
-        </div>
-
-        <div id="roster-grid" class="roster-grid"></div>
-      </section>
-
-      <section class="card">
+      <section class="card card-add">
         <div class="section-header">
           <div>
             <p class="section-label">Add Pet</p>
-            <span class="helper-text">Choose a type and a color variant, then add it to the desktop world.</span>
+            <span class="helper-text">Pick a character, color, and size preset, then send it to the desktop.</span>
           </div>
         </div>
 
@@ -76,6 +65,11 @@
             <span>Variant</span>
             <select id="variant-select"></select>
           </label>
+
+          <label class="field">
+            <span>Pet size</span>
+            <select id="size-select"></select>
+          </label>
         </div>
 
         <div class="actions-row">
@@ -83,11 +77,22 @@
         </div>
       </section>
 
-      <section class="card">
+      <section class="card card-roster">
+        <div class="section-header">
+          <div>
+            <p class="section-label">Roster</p>
+            <span class="helper-text">Preview the available companions and their variants.</span>
+          </div>
+        </div>
+
+        <div id="roster-grid" class="roster-grid"></div>
+      </section>
+
+      <section class="card card-active">
         <div class="section-header">
           <div>
             <p class="section-label">Active Pets</p>
-            <span class="helper-text">Each pet can be removed individually. Drag them directly on the desktop scene to reposition them.</span>
+            <span class="helper-text">Remove pets one by one or drag them directly in the desktop scene.</span>
           </div>
         </div>
 
@@ -95,6 +100,6 @@
       </section>
     </main>
 
-    <script type="module" src="./controlPanel.js"></script>
+    <script type="module" src="./renderer.js"></script>
   </body>
-  </html>
+</html>

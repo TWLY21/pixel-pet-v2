@@ -1,4 +1,4 @@
-* {
+﻿* {
   box-sizing: border-box;
 }
 
@@ -21,46 +21,30 @@ body {
   height: 100%;
 }
 
-.debug-badge {
-  position: absolute;
-  right: 14px;
-  bottom: 60px;
-  z-index: 6;
-  padding: 6px 10px;
-  border-radius: 999px;
-  background: rgba(185, 48, 59, 0.92);
-  color: #fff8ee;
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 0.04em;
-  box-shadow: 0 10px 18px rgba(16, 21, 37, 0.22);
-  opacity: 0;
-  pointer-events: none;
-}
-
 .overlay-actions {
   position: absolute;
   left: 14px;
-  bottom: 60px;
-  z-index: 5;
+  bottom: 66px;
   display: flex;
   gap: 8px;
+  z-index: 5;
 }
 
-.panel-button {
-  padding: 6px 12px;
+.action-button {
+  min-width: 72px;
+  padding: 8px 14px;
   border: 0;
   border-radius: 999px;
-  background: rgba(34, 47, 80, 0.9);
-  color: #f8f5ea;
-  font-size: 12px;
-  font-weight: 700;
+  background: rgba(37, 50, 86, 0.94);
+  color: #fff8ec;
+  font-size: 13px;
+  font-weight: 800;
   cursor: pointer;
   box-shadow: 0 10px 18px rgba(16, 21, 37, 0.22);
 }
 
-.quit-button {
-  background: rgba(130, 49, 59, 0.92);
+.action-button-danger {
+  background: rgba(163, 64, 74, 0.95);
 }
 
 .scene {
@@ -69,136 +53,150 @@ body {
   display: flex;
   align-items: flex-end;
   padding: 0 10px 6px;
-  z-index: 1;
 }
 
 .scene-platform {
   position: relative;
   width: 100%;
-  height: 54px;
+  height: 58px;
   border-radius: 18px 18px 0 0;
   background:
-    linear-gradient(180deg, rgba(108, 184, 103, 0.94) 0 12px, rgba(123, 90, 59, 0.95) 12px 32px, rgba(84, 58, 39, 0.97) 32px 54px);
+    linear-gradient(180deg, rgba(114, 194, 108, 0.95) 0 12px, rgba(130, 95, 63, 0.96) 12px 32px, rgba(83, 58, 39, 0.98) 32px 54px);
   box-shadow:
-    inset 0 3px 0 rgba(185, 230, 148, 0.82),
-    0 -10px 20px rgba(58, 104, 72, 0.14);
+    inset 0 3px 0 rgba(190, 233, 151, 0.86),
+    0 -8px 18px rgba(58, 104, 72, 0.12);
 }
 
 .scene-grass {
   position: absolute;
-  top: -6px;
+  top: -7px;
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background: rgba(214, 255, 168, 0.32);
-  pointer-events: none;
+  background: rgba(214, 255, 168, 0.38);
 }
 
-.sparkle-a {
-  left: 14%;
+.scene-grass-a {
+  left: 16%;
 }
 
-.sparkle-b {
+.scene-grass-b {
   right: 18%;
 }
 
 .pet-layer {
   position: absolute;
-  inset: 0 8px 10px;
-  z-index: 4;
+  inset: 0 10px 6px;
   pointer-events: none;
+  z-index: 4;
 }
 
 .pet-shell {
   position: absolute;
-  width: 92px;
-  height: 122px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-end;
-  transition: transform 90ms ease;
+  transition: transform 140ms ease, filter 140ms ease;
 }
 
 .pet-shell::before {
   content: "";
   position: absolute;
-  left: 18px;
-  bottom: 10px;
-  width: 56px;
-  height: 14px;
+  left: 50%;
+  bottom: 12px;
+  width: 58%;
+  height: 12px;
+  transform: translateX(-50%);
   border-radius: 999px;
-  background: rgba(30, 24, 20, 0.26);
+  background: rgba(28, 22, 18, 0.26);
   filter: blur(2px);
-  z-index: 0;
 }
 
 .pet-shell.is-dragging {
-  z-index: 4;
   transform: translateY(-6px);
+  filter: saturate(1.05);
 }
 
 .pet-bubble {
-  min-height: 24px;
-  max-width: 140px;
-  margin-bottom: 5px;
-  padding: 4px 8px;
-  border-radius: 999px;
-  background: rgba(255, 250, 221, 0.97);
-  color: #2b2c45;
+  position: absolute;
+  left: 50%;
+  bottom: calc(var(--pet-size) + 16px);
+  max-width: 164px;
+  min-height: 28px;
+  padding: 6px 10px;
+  border: 2px solid rgba(39, 45, 67, 0.16);
+  border-radius: 14px;
+  background: rgba(255, 250, 221, 0.98);
+  color: #2c2d45;
   font-size: 11px;
   font-weight: 700;
+  line-height: 1.3;
   text-align: center;
   opacity: 0;
-  transform: translateY(6px);
+  transform: translate(-50%, 6px);
   transition: opacity 100ms ease, transform 100ms ease;
+  pointer-events: none;
+  box-shadow: 0 10px 18px rgba(26, 31, 48, 0.14);
+  white-space: normal;
+  overflow-wrap: break-word;
+  z-index: 2;
+}
+
+.pet-bubble::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -8px;
+  width: 12px;
+  height: 12px;
+  background: rgba(255, 250, 221, 0.98);
+  border-right: 2px solid rgba(39, 45, 67, 0.16);
+  border-bottom: 2px solid rgba(39, 45, 67, 0.16);
+  transform: translateX(-50%) rotate(45deg);
 }
 
 .pet-bubble.is-visible {
   opacity: 1;
-  transform: translateY(0);
+  transform: translate(-50%, 0);
 }
 
 .pet-hitbox {
-  width: 92px;
-  height: 92px;
-  padding: 0;
   border: 0;
+  padding: 0;
   background: transparent;
   cursor: grab;
   position: relative;
   z-index: 1;
   pointer-events: auto;
+  touch-action: none;
+}
+
+.pet-hitbox:focus-visible {
+  outline: 2px dashed rgba(255, 255, 255, 0.92);
+  outline-offset: 4px;
 }
 
 .pet-shell.is-dragging .pet-hitbox {
   cursor: grabbing;
 }
 
-.pet-hitbox:focus-visible {
-  outline: 2px dashed rgba(255, 255, 255, 0.9);
-  outline-offset: 4px;
-}
-
 .pet-sprite {
-  width: 92px;
-  height: 92px;
   display: block;
   image-rendering: pixelated;
   transform-origin: center bottom;
-  filter: drop-shadow(0 10px 10px rgba(18, 24, 37, 0.3));
+  filter: drop-shadow(0 8px 8px rgba(18, 24, 37, 0.24));
 }
 
 .pet-label {
-  margin-top: 2px;
-  padding: 2px 7px;
+  margin-top: 4px;
+  padding: 3px 9px;
   border-radius: 999px;
   background: rgba(20, 28, 48, 0.72);
   color: #f4f6ef;
   font-size: 10px;
   font-weight: 700;
-  position: relative;
-  z-index: 1;
+  letter-spacing: 0.01em;
 }
 
 .hidden-banner {
@@ -208,13 +206,12 @@ body {
   transform: translateX(-50%);
   padding: 8px 14px;
   border-radius: 999px;
-  background: rgba(27, 34, 54, 0.9);
+  background: rgba(27, 34, 54, 0.92);
   color: #f3f4ed;
   font-size: 12px;
   font-weight: 700;
   opacity: 0;
   transition: opacity 120ms ease;
-  pointer-events: none;
 }
 
 body[data-hidden="true"] .hidden-banner {
@@ -224,10 +221,4 @@ body[data-hidden="true"] .hidden-banner {
 body[data-hidden="true"] .pet-shell {
   opacity: 0;
   pointer-events: none;
-}
-
-@media (max-width: 1200px) {
-  .overlay-actions {
-    bottom: 56px;
-  }
 }

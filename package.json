@@ -1,18 +1,11 @@
-{
-  "name": "pixel-desktop-pet-world",
+﻿{
+  "name": "pixel-desktop-pet-world-v2",
   "version": "1.0.0",
-  "description": "A pixel-art desktop pet world built with Electron, draggable companions, and a control panel.",
+  "description": "A calmer Windows-first Electron desktop pet world rebuild.",
   "main": "main.js",
   "scripts": {
     "start": "electron ."
   },
-  "keywords": [
-    "electron",
-    "desktop-pet",
-    "pixel-art",
-    "virtual-pet"
-  ],
-  "author": "Ives Tan Kian Hang",
   "license": "MIT",
   "devDependencies": {
     "electron": "^37.2.1"

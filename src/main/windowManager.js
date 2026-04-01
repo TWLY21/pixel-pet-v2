@@ -1,4 +1,4 @@
-const path = require("path");
+﻿const path = require("path");
 const { BrowserWindow } = require("electron");
 
 function createWindowManager({ preloadPath, displayManager, shouldPreventPanelClose }) {
@@ -42,13 +42,12 @@ class WindowManager {
 
     this.controlPanelWindow = new BrowserWindow({
       ...this.displayManager.getControlPanelBounds(),
+      autoHideMenuBar: true,
       resizable: false,
-      minimizable: true,
       maximizable: false,
       fullscreenable: false,
-      autoHideMenuBar: true,
-      backgroundColor: "#f6f1e8",
-      title: "Pixel Desktop Pet World",
+      title: "Pixel Desktop Pet World v2",
+      backgroundColor: "#f5efe5",
       webPreferences: {
         preload: this.preloadPath,
         contextIsolation: true,
@@ -88,6 +87,12 @@ class WindowManager {
     }
   }
 
+  setOverlayPointerCapture(shouldCapture) {
+    if (this.overlayWindow && !this.overlayWindow.isDestroyed()) {
+      this.overlayWindow.setIgnoreMouseEvents(!shouldCapture, { forward: true });
+    }
+  }
+
   showControlPanel() {
     if (this.controlPanelWindow && !this.controlPanelWindow.isDestroyed()) {
       this.controlPanelWindow.show();
@@ -98,12 +103,6 @@ class WindowManager {
   hideControlPanel() {
     if (this.controlPanelWindow && !this.controlPanelWindow.isDestroyed()) {
       this.controlPanelWindow.hide();
-    }
-  }
-
-  setOverlayPointerCapture(shouldCapture) {
-    if (this.overlayWindow && !this.overlayWindow.isDestroyed()) {
-      this.overlayWindow.setIgnoreMouseEvents(!shouldCapture, { forward: true });
     }
   }
 }

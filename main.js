@@ -1,40 +1,16 @@
-const path = require("path");
+﻿const path = require("path");
 const { app, ipcMain, screen } = require("electron");
 const { APP_TITLE } = require("./src/common/constants");
 const { createDisplayManager } = require("./src/main/displayManager");
-const { createWindowManager } = require("./src/main/windowManager");
 const { createPetManager } = require("./src/main/petManager");
-const { createTrayManager } = require("./src/main/trayManager");
+const { createWindowManager } = require("./src/main/windowManager");
 
 let displayManager;
-let windowManager;
 let petManager;
-let trayManager;
+let windowManager;
 let isQuitting = false;
-let overlayManualCapture = false;
 let overlayInteractivityTimer = null;
-
-function quitApplication() {
-  if (isQuitting) {
-    return;
-  }
-
-  isQuitting = true;
-
-  if (petManager) {
-    petManager.stop();
-  }
-
-  if (trayManager) {
-    trayManager.destroy();
-  }
-
-  app.quit();
-
-  setTimeout(() => {
-    app.exit(0);
-  }, 250);
-}
+let overlayManualCapture = false;
 
 function buildSnapshot() {
   const snapshot = petManager.getSnapshot();
@@ -49,6 +25,21 @@ function buildSnapshot() {
   };
 }
 
+function broadcastWorldState() {
+  if (!windowManager) {
+    return;
+  }
+
+  windowManager.broadcast("world:updated", buildSnapshot());
+}
+
+function refreshDisplaySelection() {
+  displayManager.refreshActiveDisplay();
+  windowManager.applyDisplayBounds();
+  petManager.setSceneMetrics(displayManager.getSceneMetrics());
+  broadcastWorldState();
+}
+
 function shouldCaptureOverlayPointer() {
   if (!windowManager || !petManager) {
     return false;
@@ -58,9 +49,12 @@ function shouldCaptureOverlayPointer() {
     return true;
   }
 
+  if (petManager.isDragging()) {
+    return true;
+  }
+
   const overlayBounds = displayManager.getOverlayBounds();
   const cursor = screen.getCursorScreenPoint();
-
   const relativeX = cursor.x - overlayBounds.x;
   const relativeY = cursor.y - overlayBounds.y;
 
@@ -73,29 +67,20 @@ function shouldCaptureOverlayPointer() {
     return false;
   }
 
-  // Bottom-left control pills area.
-  if (relativeX >= 8 && relativeX <= 260 && relativeY >= overlayBounds.height - 110) {
+  if (relativeX >= 10 && relativeX <= 220 && relativeY >= overlayBounds.height - 92) {
     return true;
   }
 
-  // Pet hit areas so pets can be clicked and dragged even while the overlay is click-through.
-  for (const pet of petManager.getAllPets()) {
-    const hitLeft = pet.x;
-    const hitTop = 0;
-    const hitWidth = 92;
-    const hitHeight = overlayBounds.height - 10;
-
-    if (
-      relativeX >= hitLeft &&
-      relativeX <= hitLeft + hitWidth &&
+  return petManager.getAllPets().some((pet) => {
+    const hitTop = Math.max(0, overlayBounds.height - pet.renderBottom - pet.sizePx - 30);
+    const hitBottom = Math.min(overlayBounds.height, overlayBounds.height - pet.renderBottom + 10);
+    return (
+      relativeX >= pet.renderX &&
+      relativeX <= pet.renderX + pet.sizePx &&
       relativeY >= hitTop &&
-      relativeY <= hitTop + hitHeight
-    ) {
-      return true;
-    }
-  }
-
-  return false;
+      relativeY <= hitBottom
+    );
+  });
 }
 
 function refreshOverlayInteractivity() {
@@ -106,119 +91,79 @@ function refreshOverlayInteractivity() {
   windowManager.setOverlayPointerCapture(shouldCaptureOverlayPointer());
 }
 
-function broadcastWorldState() {
-  if (!windowManager) {
+function quitApplication() {
+  if (isQuitting) {
     return;
   }
 
-  windowManager.broadcast("world:updated", buildSnapshot());
+  isQuitting = true;
 
-  if (trayManager) {
-    trayManager.refreshMenu();
+  clearInterval(overlayInteractivityTimer);
+
+  if (petManager) {
+    petManager.stop();
   }
-}
 
-function syncDisplaySelection() {
-  displayManager.refreshActiveDisplay();
-  windowManager.applyDisplayBounds();
-  petManager.setSceneMetrics(displayManager.getSceneMetrics());
-  broadcastWorldState();
+  app.quit();
+
+  setTimeout(() => {
+    app.exit(0);
+  }, 300);
 }
 
 app.whenReady().then(() => {
   displayManager = createDisplayManager({ screen });
+  petManager = createPetManager({
+    sceneMetrics: displayManager.getSceneMetrics(),
+    broadcast: () => {
+      refreshOverlayInteractivity();
+      broadcastWorldState();
+    }
+  });
   windowManager = createWindowManager({
     preloadPath: path.join(__dirname, "preload.js"),
     displayManager,
     shouldPreventPanelClose: () => !isQuitting
   });
-  petManager = createPetManager({
-    sceneMetrics: displayManager.getSceneMetrics(),
-    broadcast: broadcastWorldState
-  });
-  trayManager = createTrayManager({
-    appTitle: APP_TITLE,
-    getWorldState: () => ({
-      petsVisible: petManager.getSnapshot().world.petsVisible
-    }),
-    actions: {
-      showControlPanel: () => windowManager.showControlPanel(),
-      togglePetsVisible: () => {
-        const petsVisible = petManager.getSnapshot().world.petsVisible;
-        petManager.setPetsVisible(!petsVisible);
-      },
-      quitApp: () => quitApplication()
-    }
-  });
 
   petManager.ensureStarterPet();
   petManager.start();
   windowManager.createWindows();
-  trayManager.create();
-  overlayInteractivityTimer = setInterval(refreshOverlayInteractivity, 80);
-  refreshOverlayInteractivity();
   broadcastWorldState();
+  refreshOverlayInteractivity();
 
-  screen.on("display-added", syncDisplaySelection);
-  screen.on("display-removed", syncDisplaySelection);
-  screen.on("display-metrics-changed", syncDisplaySelection);
+  overlayInteractivityTimer = setInterval(refreshOverlayInteractivity, 90);
+
+  screen.on("display-added", refreshDisplaySelection);
+  screen.on("display-removed", refreshDisplaySelection);
+  screen.on("display-metrics-changed", refreshDisplaySelection);
 });
 
 ipcMain.handle("app:get-app-data", () => {
   return {
     title: APP_TITLE,
     maxPets: petManager.getMaxPets(),
-    catalog: petManager.getCatalog()
+    catalog: petManager.getCatalog(),
+    sizeOptions: petManager.getSizeOptions()
   };
 });
 
-ipcMain.handle("world:get-snapshot", () => {
-  return buildSnapshot();
-});
-
-ipcMain.handle("world:add-pet", (_event, payload) => {
-  const result = petManager.addPet(payload);
-  refreshOverlayInteractivity();
-  return result;
-});
-
-ipcMain.handle("world:remove-pet", (_event, petId) => {
-  const result = petManager.removePet(petId);
-  refreshOverlayInteractivity();
-  return result;
-});
-
-ipcMain.handle("world:remove-all-pets", () => {
-  const result = petManager.removeAllPets();
-  refreshOverlayInteractivity();
-  return result;
-});
-
-ipcMain.handle("world:set-pets-visible", (_event, visible) => {
-  return petManager.setPetsVisible(visible);
-});
-
-ipcMain.handle("world:set-slogans-enabled", (_event, enabled) => {
-  return petManager.setSlogansEnabled(enabled);
-});
-
-ipcMain.handle("world:start-pet-drag", (_event, petId) => {
-  return petManager.startPetDrag(petId);
-});
-
-ipcMain.handle("world:update-pet-position", (_event, payload) => {
-  return petManager.updatePetPosition(payload);
-});
-
-ipcMain.handle("world:end-pet-drag", (_event, petId) => {
-  return petManager.endPetDrag(petId);
-});
+ipcMain.handle("world:get-snapshot", () => buildSnapshot());
+ipcMain.handle("world:add-pet", (_event, payload) => petManager.addPet(payload));
+ipcMain.handle("world:remove-pet", (_event, petId) => petManager.removePet(petId));
+ipcMain.handle("world:remove-all-pets", () => petManager.removeAllPets());
+ipcMain.handle("world:set-pets-visible", (_event, visible) => petManager.setPetsVisible(visible));
+ipcMain.handle("world:set-slogans-enabled", (_event, enabled) => petManager.setSlogansEnabled(enabled));
+ipcMain.handle("world:start-pet-drag", (_event, petId) => petManager.startPetDrag(petId));
+ipcMain.handle("world:update-pet-position", (_event, payload) => petManager.updatePetPosition(payload));
+ipcMain.handle("world:end-pet-drag", (_event, petId) => petManager.endPetDrag(petId));
+ipcMain.handle("world:poke-pet", (_event, petId) => petManager.pokePet(petId));
 
 ipcMain.handle("display:set-active-display", (_event, displayId) => {
   const result = displayManager.setActiveDisplay(displayId);
 
   if (result.ok) {
-    syncDisplaySelection();
+    refreshDisplaySelection();
   }
 
   return result;
@@ -234,29 +179,24 @@ ipcMain.handle("window:hide-control-panel", () => {
   return { ok: true };
 });
 
-ipcMain.handle("app:quit", () => {
-  quitApplication();
-  return { ok: true };
-});
-
 ipcMain.handle("window:set-overlay-pointer-capture", (_event, shouldCapture) => {
   overlayManualCapture = Boolean(shouldCapture);
   refreshOverlayInteractivity();
   return { ok: true };
 });
 
+ipcMain.handle("app:quit", () => {
+  quitApplication();
+  return { ok: true };
+});
+
 app.on("before-quit", () => {
   isQuitting = true;
+  clearInterval(overlayInteractivityTimer);
 
   if (petManager) {
     petManager.stop();
   }
-
-  if (trayManager) {
-    trayManager.destroy();
-  }
-
-  clearInterval(overlayInteractivityTimer);
 });
 
 app.on("window-all-closed", () => {
